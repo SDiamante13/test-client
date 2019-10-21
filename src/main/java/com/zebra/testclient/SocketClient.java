@@ -1,22 +1,28 @@
 package com.zebra.testclient;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
-
 @Data
-@RequiredArgsConstructor
-public class HttpClient {
-
-    private final String host;
-    private final int port;
+@NoArgsConstructor
+public class SocketClient {
+    private String host;
+    private int port;
 
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader reader;
+
+    public SocketClient(String host, int port) {
+        this.host = host;
+        this.port = port;
+    }
 
     public void establishConnection() {
         try {
@@ -28,34 +34,40 @@ public class HttpClient {
         }
     }
 
+    /**
+     * Sends HTTP request to server.
+     *
+     * @param httpMethod
+     * @param path
+     * @param httpVersion
+     */
     public String sendMessage(String httpMethod, String path, String httpVersion) {
-//        writer.println();
-//
-//        String line;
-//        try {
-//            line = reader.readLine();
-//
-//            while (line != null) {
-//                System.out.println(line);
-//                line = reader.readLine();
-//                if(line == null) {
-//                    line = reader.readLine();
-//                }
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        writer.println(httpMethod + " " + path + " " + httpVersion);
+        writer.println();
+
+        return readResponse();
+    }
+
+    /**
+     * Sends TCP request to server.
+     *
+     * @param message
+     */
+    public String sendMessage(String message) {
+        writer.println(message);
+
+        return readResponse();
+    }
+
+    public String readResponse() {
         char[] numberBuffer = new char[256];
         StringBuilder response = new StringBuilder();
         try {
-            writer.println(httpMethod + " " + path + " " + httpVersion);
-            writer.println();
             reader.read(numberBuffer, 0, 256);
             for (char number : numberBuffer) {
                 if (number == Character.MIN_VALUE) break;
                 response.append(number);
             }
-            System.out.println(response.toString());
             return response.toString();
         } catch (IOException e) {
             return e.toString();
@@ -71,5 +83,4 @@ public class HttpClient {
             e.printStackTrace();
         }
     }
-
 }

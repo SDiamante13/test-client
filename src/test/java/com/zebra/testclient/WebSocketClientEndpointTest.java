@@ -6,7 +6,9 @@ import java.net.URI;
 
 class WebSocketClientEndpointTest {
 
-    private WebSocketClientEndpoint webSocketClientEndpoint = new WebSocketClientEndpoint(URI.create("ws://localhost:8090/number"));
+    private static final URI uri = URI.create("ws://localhost:8090/number");
+
+    private WebSocketClientEndpoint webSocketClientEndpoint = new WebSocketClientEndpoint(uri);
 
     @Test
     void webSocketClient() {

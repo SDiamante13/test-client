@@ -47,10 +47,4 @@ public class WebSocketClientEndpoint {
             this.session.getAsyncRemote().sendText(message);
         }
     }
-
-//    public interface MessageHandler {
-//        void handleMessage(String message);
-//    }
-
-
 }
