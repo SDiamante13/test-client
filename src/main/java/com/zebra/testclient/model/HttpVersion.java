@@ -1,10 +1,5 @@
 package com.zebra.testclient.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
 public enum HttpVersion {
     ZERO_DOT_NINE("HTTP/0.9"),
     ONE_DOT_ZERO("HTTP/1.0"),
@@ -12,4 +7,12 @@ public enum HttpVersion {
     TWO_DOT_ZERO("HTTP/2.0");
 
     private String versionNumber;
+
+    HttpVersion(String versionNumber) {
+        this.versionNumber = versionNumber;
+    }
+
+    public String getVersionNumber() {
+        return versionNumber;
+    }
 }

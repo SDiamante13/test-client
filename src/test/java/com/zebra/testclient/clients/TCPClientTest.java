@@ -16,7 +16,7 @@ class TCPClientTest {
     private final SocketClient tcpClient = new TCPClient(LOCAL_HOST, TCP_PORT);
 
     @AfterTestClass
-    private void tearDown() {
+    void tearDown() {
         tcpClient.closeConnection();
     }
 
@@ -52,6 +52,7 @@ class TCPClientTest {
     }
 
     @Test
+    // Returns Flag -> %36.0&%0.0&
     void sendMessage_withNegative6_callsTcpServerEndpoint_andReturns0() {
         String expected = "%36.0&";
         Message message = Message.builder().messageBody("-6").build();
@@ -89,5 +90,14 @@ class TCPClientTest {
         String result = tcpClient.sendMessage(message);
 
         assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    void closeConnection_closesTheSocketConnection() {
+        assertThat(tcpClient.socket.isClosed()).isFalse();
+
+        tcpClient.closeConnection();
+
+        assertThat(tcpClient.socket.isClosed()).isTrue();
     }
 }

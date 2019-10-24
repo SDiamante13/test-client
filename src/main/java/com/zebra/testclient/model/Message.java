@@ -1,19 +1,26 @@
 package com.zebra.testclient.model;
 
-import lombok.Builder;
-import lombok.Data;
-
 import java.util.Map;
 import java.util.Objects;
 
-@Data
-@Builder
 public class Message {
     private HttpMethod httpMethod;
     private String path;
     private HttpVersion httpVersion;
     private Map<String, String> headers;
     private String messageBody;
+
+    Message(HttpMethod httpMethod, String path, HttpVersion httpVersion, Map<String, String> headers, String messageBody) {
+        this.httpMethod = httpMethod;
+        this.path = path;
+        this.httpVersion = httpVersion;
+        this.headers = headers;
+        this.messageBody = messageBody;
+    }
+
+    public static MessageBuilder builder() {
+        return new MessageBuilder();
+    }
 
     @Override
     public String toString() {
@@ -49,5 +56,65 @@ public class Message {
 
     private String printMessageBody(String messageBody) {
         return Objects.isNull(messageBody) ? "" : " " + messageBody;
+    }
+
+    public static class MessageBuilder {
+        private HttpMethod httpMethod;
+        private String path;
+        private HttpVersion httpVersion;
+        private Map<String, String> headers;
+        private String messageBody;
+
+        MessageBuilder() {
+        }
+
+        public MessageBuilder httpMethod(HttpMethod httpMethod) {
+            this.httpMethod = httpMethod;
+            return this;
+        }
+
+        public MessageBuilder path(String path) {
+            this.path = path;
+            return this;
+        }
+
+        public MessageBuilder httpVersion(HttpVersion httpVersion) {
+            this.httpVersion = httpVersion;
+            return this;
+        }
+
+        public MessageBuilder headers(Map<String, String> headers) {
+            this.headers = headers;
+            return this;
+        }
+
+        public MessageBuilder messageBody(String messageBody) {
+            this.messageBody = messageBody;
+            return this;
+        }
+
+        public Message build() {
+            return new Message(httpMethod, path, httpVersion, headers, messageBody);
+        }
+    }
+
+    public HttpMethod getHttpMethod() {
+        return httpMethod;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public HttpVersion getHttpVersion() {
+        return httpVersion;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    public String getMessageBody() {
+        return messageBody;
     }
 }

@@ -1,9 +1,8 @@
 package com.zebra.testclient.clients;
 
 import com.zebra.testclient.model.Message;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,27 +15,25 @@ import java.net.Socket;
  * This class is a top-level abstraction of a client used to connect and send messages to server hosts.
  * It uses a Socket to connect to a hostname and port of the server.
  *
- *  @see com.zebra.testclient.clients.HttpClient
- *  @see com.zebra.testclient.clients.TCPClient
- *
- *  @author Steven Diamante
+ * @author Steven Diamante
+ * @see com.zebra.testclient.clients.HttpClient
+ * @see com.zebra.testclient.clients.TCPClient
  */
-@Data
-@Slf4j
-@NoArgsConstructor
 public abstract class SocketClient {
 
-    protected String hostName;
-    protected int port;
+    protected Logger log = LoggerFactory.getLogger(SocketClient.class);
+
+    protected final String hostName;
+    protected final int port;
     protected Socket socket;
     protected PrintWriter writer;
     protected BufferedReader reader;
 
     /**
      * @param hostName The hostname of the server to connect to.
-     * @param port The port number of the server to connect to.
+     * @param port     The port number of the server to connect to.
      */
-    SocketClient(String hostName, int port) {
+    public SocketClient(String hostName, int port) {
         this.hostName = hostName;
         this.port = port;
 
@@ -55,7 +52,7 @@ public abstract class SocketClient {
      * @param message A message sent from the client to the server
      * @return
      */
-    String sendMessage(Message message) {
+    public String sendMessage(Message message) {
         writer.println(message);
         writer.println();
 
@@ -67,7 +64,7 @@ public abstract class SocketClient {
      *
      * @return response from the socket server
      */
-    String readResponse() {
+    public String readResponse() {
         char[] numberBuffer = new char[256];
         StringBuilder response = new StringBuilder();
         try {
@@ -85,7 +82,7 @@ public abstract class SocketClient {
     /**
      * Closes the connection to the server.
      */
-    void closeConnection() {
+    public void closeConnection() {
         try {
             reader.close();
             writer.close();

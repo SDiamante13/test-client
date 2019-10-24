@@ -1,7 +1,7 @@
 package com.zebra.testclient.clients;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.websocket.*;
 import java.io.IOException;
@@ -18,10 +18,10 @@ import java.net.URI;
  * @see javax.websocket.ContainerProvider
  * @see javax.websocket.Session
  */
-@Slf4j
-@Getter
 @ClientEndpoint
 public class WebSocketClient {
+
+    private Logger log = LoggerFactory.getLogger(WebSocketClient.class);
 
     private Session session;
 
@@ -91,5 +91,9 @@ public class WebSocketClient {
 
     public interface MessageHandler {
         void handleMessage(String message);
+    }
+
+    public Session getSession() {
+        return session;
     }
 }

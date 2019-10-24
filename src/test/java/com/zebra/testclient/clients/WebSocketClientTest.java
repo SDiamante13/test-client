@@ -17,9 +17,7 @@ class WebSocketClientTest {
 
     @AfterTestClass
     private void tearDown() {
-        webSocketClient.closeConnection(webSocketClient.getSession(),
-                new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE ,
-                        "Closed Successfully"));
+        terminateSession();
     }
 
     @Test
@@ -76,5 +74,20 @@ class WebSocketClientTest {
 
         Thread.sleep(250);
         assertThat(results[0]).isEqualTo(expected);
+    }
+
+    @Test
+    void closeConnection_closesTheWebSocketSession() {
+        assertThat(webSocketClient.getSession()).isNotNull();
+
+        terminateSession();
+
+        assertThat(webSocketClient.getSession()).isNull();
+    }
+
+    private void terminateSession() {
+        webSocketClient.closeConnection(webSocketClient.getSession(),
+                new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE ,
+                        "Closed Successfully"));
     }
 }
